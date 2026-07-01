@@ -1,0 +1,37 @@
+// CodeAlpha IoT Internship - Task 2: Sensor Simulation
+// Project: Temperature-Activated Alert System
+
+const int sensorPin = A0;     
+const int ledPin = 13;        
+const float threshold = 35.0;
+
+void setup() {
+  pinMode(ledPin, OUTPUT);    
+  Serial.begin(9600);         
+}
+
+void loop() {
+  
+  int rawReading = analogRead(sensorPin);
+  
+  
+  float voltage = rawReading * (5.0 / 1024.0);
+  
+  
+
+  float temperatureC = (voltage - 0.5) * 100.0;
+  
+  
+  Serial.print("Ambient Temperature: ");
+  Serial.print(temperatureC);
+  Serial.println(" C");
+  
+  
+  if (temperatureC >= threshold) {
+    digitalWrite(ledPin, HIGH);  
+    Serial.println("[ALERT] Critical temperature breach! LED Activated.");
+  } else {
+    digitalWrite(ledPin, LOW);     }
+  
+  delay(1000); 
+}
