@@ -1,0 +1,39 @@
+/* * CodeAlpha IoT Internship - Task 3: IoT Prototype
+ * Project: Smart Motion Detection Alarm System (8051/Keil Edition)
+ */
+
+#include <reg51.h> // Standard 8051 register definitions
+
+// Hardware Pin Mapping using bit addressability
+sbit PIR_Sensor = P1^0;  // Input from LogicState on Port 1 Pin 0
+sbit Alert_LED  = P2^0;  // Output to Red LED on Port 2 Pin 0
+sbit Alarm_Buzz = P2^1;  // Output to Buzzer on Port 2 Pin 1
+
+// Software Delay Function
+void MSDelay(unsigned int value) {
+    unsigned int i, j;
+    for(i = 0; i < value; i++) {
+        for(j = 0; j < 1275; j++); // Standard loop calibration for ms delay
+    }
+}
+
+void main(void) {
+    PIR_Sensor = 1;  // Configure Port 1 Pin 0 as an Input pin
+    Alert_LED  = 0;  // Ensure Alert LED starts in OFF state
+    Alarm_Buzz = 0;  // Ensure Buzzer starts in OFF state
+
+    while(1) {
+        if(PIR_Sensor == 1) { 
+            // Threat Detected Logic
+            Alert_LED = 1;   // Fire visual indicator
+            Alarm_Buzz = 1;  // Activate auditory system
+            MSDelay(200);    
+            Alarm_Buzz = 0;  // Toggle buzzer to simulate an oscillation sound
+            MSDelay(200);
+        } else {
+            // Secure State Logic
+            Alert_LED = 0;   
+            Alarm_Buzz = 0;  
+        }
+    }
+}
